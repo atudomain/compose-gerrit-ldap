@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+
+  gerrit:
+    build:
+      context: ./dockerfile-gerrit
+    image: gerrit
+    container_name: gerrit
+    ports:
+      - "29418:29418"
+      - "127.0.0.1:81:8080"
+    volumes:
+      - ./gerrit/etc:/var/gerrit/etc
+      - ./gerrit/git:/var/gerrit/git
+      - ./gerrit/index:/var/gerrit/index
+      - ./gerrit/cache:/var/gerrit/cache
+    depends_on:
+      - ldap
+    links:
+      - ldap
+
+  ldap-admin:
+    image: osixia/phpldapadmin
+    ports:
+      - "127.0.0.1:6443:443"
+    environment:
+      - PHPLDAPADMIN_LDAP_HOSTS=ldap
+    depends_on:
+      - ldap
+    links:
+      - ldap
+
+  ldap:
+    image: osixia/openldap
+    ports:
+      - "127.0.0.1:389:389"
+      - "127.0.0.1:636:636"
+    environment:
+      - LDAP_ADMIN_PASSWORD=Secret123
+    volumes:
+      - ./ldap/var:/var/lib/ldap
+      - ./ldap/etc:/etc/ldap/slapd.d
