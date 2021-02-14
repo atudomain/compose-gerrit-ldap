@@ -7,9 +7,10 @@ services:
       context: ./dockerfile-gerrit
     image: gerrit
     container_name: gerrit
+    hostname: "localhost"
     ports:
       - "29418:29418"
-      - "127.0.0.1:81:8080"
+      - "127.0.0.1:80:8080"
     volumes:
       - ./gerrit/etc:/var/gerrit/etc
       - ./gerrit/git:/var/gerrit/git
