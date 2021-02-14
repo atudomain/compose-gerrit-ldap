@@ -22,6 +22,7 @@ services:
 
   ldap-admin:
     image: osixia/phpldapadmin
+    container_name: ldap-admin
     ports:
       - "127.0.0.1:6443:443"
     environment:
@@ -33,6 +34,7 @@ services:
 
   ldap:
     image: osixia/openldap
+    container_name: ldap
     ports:
       - "127.0.0.1:389:389"
       - "127.0.0.1:636:636"
@@ -41,3 +43,4 @@ services:
     volumes:
       - ./ldap/var:/var/lib/ldap
       - ./ldap/etc:/etc/ldap/slapd.d
+      - ./scripts:/scripts
